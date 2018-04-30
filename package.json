@@ -1,0 +1,27 @@
+{
+  "name": "@packtracker/webpack-plugin",
+  "version": "0.0.8",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "lint": "standard",
+    "test": "jest test/test.js"
+  },
+  "author": "",
+  "jest": {
+    "testEnvironment": "node"
+  },
+  "devDependencies": {
+    "jest": "^23.5.0",
+    "standard": "^10.0.3",
+    "webpack": "^4.17.1",
+    "webpack-2": "npm:webpack@2",
+    "webpack-3": "npm:webpack@3"
+  },
+  "peerDependencies": {
+    "webpack": ">= 2.0.0"
+  },
+  "dependencies": {
+    "tiny-json-http": "^7.0.0"
+  }
+}
