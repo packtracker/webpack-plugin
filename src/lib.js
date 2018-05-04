@@ -9,12 +9,7 @@ module.exports = {
         project_token: projectToken,
         commit_hash: commitHash
       }
-    }).then(response => response.body.upload_url)
-  },
-
-  clean (stats) {
-    // TODO: remove all source from stats objects
-    return stats
+    }).then(response => response.body)
   },
 
   upload (url, data) {

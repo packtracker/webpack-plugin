@@ -5,9 +5,8 @@ const sha = crypto.createHmac('sha1', Math.random().toString())
 
 const {
   generateUploadUrl,
-  clean,
   upload
-} = require('../lib')
+} = require('./src/lib')
 
 const HOST = 'http://localhost:3001'
 const PROJECT_TOKEN = 'emptyprojecttoken'
@@ -17,6 +16,6 @@ const statsObject = {
 }
 
 generateUploadUrl(HOST, PROJECT_TOKEN, sha)
-  .then(url => upload(url, clean(statsObject)))
+  .then(response => upload(response.upload_url, statsObject))
   .then(console.log)
   .catch(console.error)
