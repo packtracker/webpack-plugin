@@ -3,6 +3,8 @@ const { generateUploadUrl, upload } = require('./lib')
 function PacktrackerPlugin (options) {
   this.project_token = options.project_token || process.env.PT_PROJECT_TOKEN
   this.branch = options.branch || process.env.PT_BRANCH
+  this.author = options.author || process.env.PT_AUTHOR
+  this.message = options.message || process.env.PT_MESSAGE
   this.commit = options.commit || process.env.PT_COMMIT
   this.priorCommit = options.prior_commit || process.env.PT_PRIOR_COMMIT
   this.host = options.host || process.env.PT_HOST
@@ -16,6 +18,8 @@ PacktrackerPlugin.prototype.apply = function (compiler) {
       packer: 'webpack@' + stats.version,
       commit: this.commit,
       branch: this.branch,
+      author: this.author,
+      message: this.message,
       prior_commit: this.priorCommit,
       stats: stats
     }
