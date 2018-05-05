@@ -1,13 +1,29 @@
+const { execSync } = require('child_process')
 const { generateUploadUrl, upload } = require('./lib')
 
 function PacktrackerPlugin (options) {
   this.project_token = options.project_token || process.env.PT_PROJECT_TOKEN
-  this.branch = options.branch || process.env.PT_BRANCH
-  this.author = options.author || process.env.PT_AUTHOR
-  this.message = options.message || process.env.PT_MESSAGE
-  this.commit = options.commit || process.env.PT_COMMIT
-  this.priorCommit = options.prior_commit || process.env.PT_PRIOR_COMMIT
   this.host = options.host || process.env.PT_HOST
+
+  this.branch = options.branch ||
+    process.env.PT_BRANCH ||
+    runShell('git rev-parse --abbrev-ref HEAD')
+
+  this.author = options.author ||
+    process.env.PT_AUTHOR ||
+    runShell('git log --format="%aE" -n 1 HEAD')
+
+  this.message = options.message ||
+    process.env.PT_MESSAGE ||
+    runShell('git log --format="%B" -n 1 HEAD')
+
+  this.commit = options.commit ||
+    process.env.PT_COMMIT ||
+    runShell('git rev-parse HEAD')
+
+  this.priorCommit = options.prior_commit ||
+    process.env.PT_PRIOR_COMMIT ||
+    runShell('git rev-parse HEAD^')
 }
 
 PacktrackerPlugin.prototype.apply = function (compiler) {
@@ -32,6 +48,10 @@ PacktrackerPlugin.prototype.apply = function (compiler) {
       .then(() => done())
       .catch(done)
   })
+}
+
+function runShell (command) {
+  return execSync(command).toString().trim()
 }
 
 module.exports = PacktrackerPlugin
