@@ -21,6 +21,10 @@ function PacktrackerPlugin (options) {
     process.env.PT_COMMIT ||
     runShell('git rev-parse HEAD')
 
+  this.committed_at = options.committed_at ||
+    process.env.PT_COMMITTED_AT ||
+    runShell('git log --format="%ct" -n 1 HEAD')
+
   this.priorCommit = options.prior_commit ||
     process.env.PT_PRIOR_COMMIT ||
     runShell('git rev-parse HEAD^')
@@ -33,6 +37,7 @@ PacktrackerPlugin.prototype.apply = function (compiler) {
     const payload = {
       packer: 'webpack@' + stats.version,
       commit: this.commit,
+      committed_at: parseInt(this.committed_at),
       branch: this.branch,
       author: this.author,
       message: this.message,
