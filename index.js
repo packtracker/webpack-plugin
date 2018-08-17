@@ -3,7 +3,10 @@ const { generateUploadUrl, upload } = require('./lib')
 
 function PacktrackerPlugin (options) {
   this.project_token = options.project_token || process.env.PT_PROJECT_TOKEN
-  this.host = options.host || process.env.PT_HOST
+
+  this.host = options.host ||
+    process.env.PT_HOST ||
+    'https://api.packtracker.io'
 
   this.branch = options.branch ||
     process.env.PT_BRANCH ||
