@@ -3,6 +3,7 @@ const { generateUploadUrl, upload } = require('./lib')
 
 function PacktrackerPlugin (options) {
   this.project_token = options.project_token || process.env.PT_PROJECT_TOKEN
+  this.report = options.report || process.env.PT_REPORT || false
 
   this.host = options.host ||
     process.env.PT_HOST ||
@@ -35,6 +36,8 @@ function PacktrackerPlugin (options) {
 
 PacktrackerPlugin.prototype.apply = function (compiler) {
   compiler.plugin('emit', (currentCompiler, done) => {
+    if (!this.report) return done()
+
     const stats = currentCompiler.getStats().toJson({ source: false })
 
     const payload = {
