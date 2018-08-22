@@ -2,42 +2,45 @@ const { execSync } = require('child_process')
 const { generateUploadUrl, upload } = require('./lib')
 
 function PacktrackerPlugin (options) {
-  this.project_token = options.project_token || process.env.PT_PROJECT_TOKEN
   this.report = options.report || process.env.PT_REPORT || false
 
-  this.host = options.host ||
-    process.env.PT_HOST ||
-    'https://api.packtracker.io'
+  if (this.report) {
+    this.project_token = options.project_token || process.env.PT_PROJECT_TOKEN
 
-  this.branch = options.branch ||
-    process.env.PT_BRANCH ||
-    runShell('git rev-parse --abbrev-ref HEAD')
+    this.host = options.host ||
+      process.env.PT_HOST ||
+      'https://api.packtracker.io'
 
-  this.author = options.author ||
-    process.env.PT_AUTHOR ||
-    runShell('git log --format="%aE" -n 1 HEAD')
+    this.branch = options.branch ||
+      process.env.PT_BRANCH ||
+      runShell('git rev-parse --abbrev-ref HEAD')
 
-  this.message = options.message ||
-    process.env.PT_MESSAGE ||
-    runShell('git log --format="%B" -n 1 HEAD')
+    this.author = options.author ||
+      process.env.PT_AUTHOR ||
+      runShell('git log --format="%aE" -n 1 HEAD')
 
-  this.commit = options.commit ||
-    process.env.PT_COMMIT ||
-    runShell('git rev-parse HEAD')
+    this.message = options.message ||
+      process.env.PT_MESSAGE ||
+      runShell('git log --format="%B" -n 1 HEAD')
 
-  this.committed_at = options.committed_at ||
-    process.env.PT_COMMITTED_AT ||
-    runShell('git log --format="%ct" -n 1 HEAD')
+    this.commit = options.commit ||
+      process.env.PT_COMMIT ||
+      runShell('git rev-parse HEAD')
 
-  this.priorCommit = options.prior_commit ||
-    process.env.PT_PRIOR_COMMIT ||
-    runShell('git rev-parse HEAD^')
+    this.committed_at = options.committed_at ||
+      process.env.PT_COMMITTED_AT ||
+      runShell('git log --format="%ct" -n 1 HEAD')
+
+    this.priorCommit = options.prior_commit ||
+      process.env.PT_PRIOR_COMMIT ||
+      runShell('git rev-parse HEAD^')
+  }
 }
 
 PacktrackerPlugin.prototype.apply = function (compiler) {
-  compiler.plugin('emit', (currentCompiler, done) => {
-    if (!this.report) return done()
+  if (!this.report) return
 
+  compiler.plugin('emit', (currentCompiler, done) => {
     const stats = currentCompiler.getStats().toJson({ source: false })
 
     const payload = {
