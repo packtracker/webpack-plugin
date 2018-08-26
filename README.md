@@ -1,6 +1,7 @@
 # packtracker.io webpack plugin
 
 [![Build Status](https://travis-ci.org/packtracker/webpack-plugin.svg?branch=master)](https://travis-ci.org/packtracker/webpack-plugin)
+[![Coverage Status](https://coveralls.io/repos/github/packtracker/webpack-plugin/badge.svg?branch=master)](https://coveralls.io/github/packtracker/webpack-plugin?branch=master)
 
 This plugin is designed to report your webpack build stats to the [packtracker.io](https://packtracker.io) service.
 
