@@ -1,3 +1,4 @@
+script: yarn test:ci
 language: node_js
 cache:
   yarn: true
