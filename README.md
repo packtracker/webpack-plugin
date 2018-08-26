@@ -31,4 +31,4 @@ module.exports = {
 
 The report option above tells the plugin when it is time to report your build stats. Commonly this is best ran when building your production assets in your CI environment or during deployment. If the report option is false, the plugin will do nothing.  This basic configuration infers a lot of information from your local git repository, to take more control of how we get this info take a look at the option reference below.
 
-All of the options can be set [via argument to the plugin, environment variable, or allowed to query your git repository.](https://github.com/packtracker/webpack-plugin/blob/777fa84/index.js#L5-L37)
+All of the options can be set [via argument to the plugin, environment variable, or allowed to query your git repository.](https://github.com/packtracker/webpack-plugin/blob/master/index.js)
