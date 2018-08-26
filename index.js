@@ -1,11 +1,11 @@
 const { execSync } = require('child_process')
 const { generateUploadUrl, upload } = require('./lib')
 
-function PacktrackerPlugin (options) {
-  this.report = options.report || process.env.PT_REPORT || false
+function PacktrackerPlugin (options = {}) {
+  this.report = options.report || process.env.PT_REPORT === 'true' || false
 
   if (this.report) {
-    this.project_token = options.project_token || process.env.PT_PROJECT_TOKEN
+    this.projectToken = options.project_token || process.env.PT_PROJECT_TOKEN
 
     this.host = options.host ||
       process.env.PT_HOST ||
@@ -54,7 +54,7 @@ PacktrackerPlugin.prototype.apply = function (compiler) {
       stats: stats
     }
 
-    generateUploadUrl(this.host, this.project_token, this.commit)
+    generateUploadUrl(this.host, this.projectToken, this.commit)
       .then(response => {
         payload.project_id = response.project_id
         return upload(response.upload_url, payload)

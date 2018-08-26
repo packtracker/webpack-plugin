@@ -34,6 +34,8 @@ const plugin = new PacktrackerPlugin({
 })
 
 describe('PacktrackerPlugin', () => {
+  beforeEach(() => jest.clearAllMocks())
+
   test('webpack@2', (done) => {
     webpack2({
       entry: path.resolve(__dirname, 'files/entry.js'),
@@ -75,6 +77,24 @@ describe('PacktrackerPlugin', () => {
     }, (err, stats) => {
       if (err) return done(err)
       expectations(stats)
+      done()
+    })
+  })
+
+  test('webpack@4 short circut reporting', (done) => {
+    webpack4({
+      entry: path.resolve(__dirname, 'files/entry.js'),
+      output: {
+        path: path.resolve(__dirname, 'files/output'),
+        filename: 'bundle.js'
+      },
+      plugins: [
+        new PacktrackerPlugin({ report: false })
+      ]
+    }, (err, stats) => {
+      if (err) return done(err)
+      expect(tiny.post).not.toHaveBeenCalled()
+      expect(tiny.put).not.toHaveBeenCalled()
       done()
     })
   })
