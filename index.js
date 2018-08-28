@@ -45,9 +45,8 @@ PacktrackerPlugin.prototype.apply = function (compiler) {
   compiler.plugin('emit', (currentCompiler, done) => {
     const stats = currentCompiler.getStats()
     const sourceless = stats.toJson({ source: false })
-
     const webpackDependencyStats = new WebpackDependencyStats(stats, {
-      srcFolder: path.resolve(__dirname, 'app/javascript'),
+      srcFolder: currentCompiler.context,
       onlyLocal: false
     })
 
