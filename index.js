@@ -59,8 +59,14 @@ PacktrackerPlugin.prototype.apply = function (compiler) {
         payload.project_id = response.project_id
         return upload(response.upload_url, payload)
       })
-      .then(() => done())
-      .catch(done)
+      .then(() => {
+        console.log('Packtracker stats uploaded!')
+      })
+      .catch((error) => {
+        console.error(`Failed to upload stats: ${error.message}`)
+        console.error(error)
+        done()
+      })
   })
 }
 
