@@ -61,6 +61,7 @@ PacktrackerPlugin.prototype.apply = function (compiler) {
       })
       .then(() => {
         console.log('Packtracker stats uploaded!')
+        done()
       })
       .catch((error) => {
         console.error(`Failed to upload stats: ${error.message}`)
