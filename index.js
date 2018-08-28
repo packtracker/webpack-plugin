@@ -1,5 +1,7 @@
+const path = require('path')
 const { execSync } = require('child_process')
 const { generateUploadUrl, upload } = require('./lib')
+const WebpackDependencyStats = require('webpack-dependency-stats')
 
 function PacktrackerPlugin (options = {}) {
   this.report = options.report || process.env.PT_REPORT === 'true' || false
@@ -41,7 +43,13 @@ PacktrackerPlugin.prototype.apply = function (compiler) {
   if (!this.report) return
 
   compiler.plugin('emit', (currentCompiler, done) => {
-    const stats = currentCompiler.getStats().toJson({ source: false })
+    const stats = currentCompiler.getStats()
+    const sourceless = stats.toJson({ source: false })
+
+    const webpackDependencyStats = new WebpackDependencyStats(stats, {
+      srcFolder: path.resolve(__dirname, 'app/javascript'),
+      onlyLocal: false
+    })
 
     const payload = {
       packer: 'webpack@' + stats.version,
@@ -51,7 +59,8 @@ PacktrackerPlugin.prototype.apply = function (compiler) {
       author: this.author,
       message: this.message,
       prior_commit: this.priorCommit,
-      stats: stats
+      stats: sourceless,
+      dependencies: webpackDependencyStats.getAllDependencies()
     }
 
     generateUploadUrl(this.host, this.projectToken, this.commit)

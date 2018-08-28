@@ -4902,6 +4902,12 @@ webidl-conversions@^4.0.2:
     webpack-sources "^1.0.1"
     yargs "^8.0.2"
 
+webpack-dependency-stats@^0.0.3:
+  version "0.0.3"
+  resolved "https://registry.yarnpkg.com/webpack-dependency-stats/-/webpack-dependency-stats-0.0.3.tgz#e6722b6defab5e09f90d2aa59522c57bfa406eeb"
+  dependencies:
+    lodash "^4.13.1"
+
 webpack-sources@^1.0.1, webpack-sources@^1.1.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/webpack-sources/-/webpack-sources-1.1.0.tgz#a101ebae59d6507354d71d8013950a3a8b7a5a54"
