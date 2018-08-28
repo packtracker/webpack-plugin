@@ -21,6 +21,8 @@ tiny.put.mockResolvedValue({
   body: {}
 })
 
+console.log = jest.fn()
+
 const plugin = new PacktrackerPlugin({
   report: true,
   project_token: 'abc123',
@@ -95,6 +97,27 @@ describe('PacktrackerPlugin', () => {
       if (err) return done(err)
       expect(tiny.post).not.toHaveBeenCalled()
       expect(tiny.put).not.toHaveBeenCalled()
+      expect(console.log).not.toHaveBeenCalled()
+      done()
+    })
+  })
+
+  test('webpack@4 failed to upload', (done) => {
+    console.error = jest.fn()
+    const error = new Error('Error')
+    tiny.post.mockRejectedValue(error)
+
+    webpack4({
+      entry: path.resolve(__dirname, 'files/entry.js'),
+      output: {
+        path: path.resolve(__dirname, 'files/output'),
+        filename: 'bundle.js'
+      },
+      plugins: [ plugin ]
+    }, (err, stats) => {
+      expect(err).toBe(null)
+      expect(console.error).toHaveBeenCalledWith('Packtracker stats failed to upload: Error')
+      expect(console.error).toHaveBeenCalledWith(error)
       done()
     })
   })
@@ -126,4 +149,6 @@ function expectations (stats) {
       stats: expect.any(Object)
     }
   })
+
+  expect(console.log).toHaveBeenCalledWith('Packtracker stats uploaded!')
 }
