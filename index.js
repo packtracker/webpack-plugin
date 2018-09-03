@@ -43,6 +43,8 @@ PacktrackerPlugin.prototype.apply = function (compiler) {
   compiler.plugin('emit', (currentCompiler, done) => {
     const stats = currentCompiler.getStats().toJson({ source: false })
 
+    if (stats.errors.length) return
+
     const payload = {
       packer: 'webpack@' + stats.version,
       commit: this.commit,
