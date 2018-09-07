@@ -1,21 +1,29 @@
+<p align="center">
+  <img width="250" height="250" src="https://user-images.githubusercontent.com/401520/45194786-2554ac00-b21a-11e8-9575-68407609d8e4.png">
+</p>
+
 # packtracker.io webpack plugin
 
 [![Build Status](https://travis-ci.org/packtracker/webpack-plugin.svg?branch=master)](https://travis-ci.org/packtracker/webpack-plugin)
 [![Coverage Status](https://coveralls.io/repos/github/packtracker/webpack-plugin/badge.svg?branch=master)](https://coveralls.io/github/packtracker/webpack-plugin?branch=master)
 
-This plugin is designed to report your webpack build stats to the [packtracker.io](https://packtracker.io) service.
+This plugin is designed to upload your webpack build stats to the [packtracker.io](https://packtracker.io) service.
 
-## Basic Usage
+## Installing
 
-In order to get your data flowing, all you need to do is install and configure our Webpack plugin.
+Once you have your [project created]() on [packtracker.io](https://app.packtracker.io), and a `project_token` in hand, you can get your data flowing by installing and configuring this plugin.
+
+```sh
+npm install --save-dev @packtracker/webpack-plugin
 
 ```
-npm install --save @packtracker/webpack-plugin
-```
 
-Then in your Webpack configuration include the plugin (along with your project token).
+## Configuration
 
-For example,
+In your webpack configuration include the plugin (along with your project token).
+
+> If the plugin fails to upload your stats, **it will not error out your build** but it will **log output signaling the failure**.
+
 ```js
 const PacktrackerPlugin = require('@packtracker/webpack-plugin')
 
@@ -23,12 +31,29 @@ module.exports = {
   plugins: [
     new PacktrackerPlugin({
       project_token: '<your packtracker project token>',
-      report: process.env.NODE_ENV === 'production'
+      upload: true
     })
   ]
 }
 ```
 
-The report option above tells the plugin when it is time to report your build stats. Commonly this is best ran when building your production assets in your CI environment or during deployment. If the report option is false, the plugin will do nothing.  This basic configuration infers a lot of information from your local git repository, to take more control of how we get this info take a look at the option reference below.
+The `upload` option above tells the plugin whether or not to upload your build stats when running webpack. By default, this option is set to `false` to prevent accidental uploading from your local machine. If the upload option is left `false`, the plugin will do nothing.
 
-All of the options can be set [via argument to the plugin, environment variable, or allowed to query your git repository.](https://github.com/packtracker/webpack-plugin/blob/master/index.js)
+ Once you see your stats are uploading, it is common to only upload when building your assets in a CI environment or during deployment. You can also omit this option, and set the `PT_UPLOAD` environment variable on a per run basis to control the upload of your stats.
+
+For example
+
+```js
+const PacktrackerPlugin = require('@packtracker/webpack-plugin')
+
+module.exports = {
+  plugins: [
+    new PacktrackerPlugin({
+      project_token: '<your packtracker project token>',
+      upload: process.env.CI === 'true'
+    })
+  ]
+}
+```
+
+All of the options, available to the plugin can be set [via argument to the plugin, environment variable, or allowed to query your local git repository.](https://github.com/packtracker/webpack-plugin/blob/master/index.js)
