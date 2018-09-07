@@ -40,37 +40,43 @@ function PacktrackerPlugin (options = {}) {
 PacktrackerPlugin.prototype.apply = function (compiler) {
   if (!this.report) return
 
-  compiler.plugin('emit', (currentCompiler, done) => {
-    const stats = currentCompiler.getStats().toJson({ source: false })
+  const report = (stats) => {
+    const json = stats.toJson({ source: false })
 
-    if (stats.errors.length) return
+    if (json.errors.length) return
 
     const payload = {
-      packer: 'webpack@' + stats.version,
+      packer: 'webpack@' + json.version,
       commit: this.commit,
       committed_at: parseInt(this.committed_at),
       branch: this.branch,
       author: this.author,
       message: this.message,
       prior_commit: this.priorCommit,
-      stats: stats
+      stats: json
     }
 
-    generateUploadUrl(this.host, this.projectToken, this.commit)
+    return generateUploadUrl(this.host, this.projectToken, this.commit)
       .then(response => {
         payload.project_id = response.project_id
         return upload(response.upload_url, payload)
       })
       .then(() => {
         console.log('Packtracker stats uploaded!')
-        done()
       })
       .catch((error) => {
         console.error(`Packtracker stats failed to upload: ${error.message}`)
         console.error(error)
-        done()
       })
-  })
+  }
+
+  if (compiler.hooks) {
+    compiler.hooks.done.tapPromise('packtracker', report)
+  } else {
+    compiler.plugin('emit', (currentCompiler, done) => {
+      report(currentCompiler.getStats()).then(done)
+    })
+  }
 }
 
 function runShell (command) {
