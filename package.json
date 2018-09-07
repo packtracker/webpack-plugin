@@ -1,14 +1,17 @@
 {
   "name": "@packtracker/webpack-plugin",
-  "version": "0.0.14",
-  "description": "",
+  "version": "1.0.0",
+  "description": "Upload your webpack build stats to the packtracker.io service for greater visiblity into the artifacts you're delivering to your customers.",
+  "keywords": ["webpack", "stats", "packtracker", "bundle analyzer", "bundle"],
+  "homepage": "https://app.packtracker.io",
+  "repository": "github:packtracker/webpack-plugin",
+  "license": "MIT",
   "main": "index.js",
   "scripts": {
     "lint": "standard",
     "test": "jest .test/",
     "test:ci": "yarn test --coverage --coverageReporters=text-lcov | coveralls"
   },
-  "author": "",
   "jest": {
     "testEnvironment": "node"
   },
