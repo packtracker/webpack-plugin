@@ -11,7 +11,7 @@ This plugin is designed to upload your webpack build stats to the [packtracker.i
 
 ## Installing
 
-Once you have your [project created]() on [packtracker.io](https://app.packtracker.io), and a `project_token` in hand, you can get your data flowing by installing and configuring this plugin.
+Once you have your [project created](https://docs.packtracker.io/creating-your-first-project) on [packtracker.io](https://app.packtracker.io), and a `project_token` in hand, you can get your data flowing by installing and configuring this plugin.
 
 ```sh
 npm install --save-dev @packtracker/webpack-plugin
