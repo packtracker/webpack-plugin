@@ -57,3 +57,5 @@ module.exports = {
 ```
 
 All of the options, available to the plugin can be set [via argument to the plugin, environment variable, or allowed to query your local git repository.](https://github.com/packtracker/webpack-plugin/blob/master/index.js)
+
+You can find more documentation at [https://docs.packtracker.io](https://docs.packtracker.io)
