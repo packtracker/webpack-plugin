@@ -39,7 +39,7 @@ module.exports = {
 
 The `upload` option above tells the plugin whether or not to upload your build stats when running webpack. By default, this option is set to `false` to prevent accidental uploading from your local machine. If the upload option is left `false`, the plugin will do nothing.
 
- Once you see your stats are uploading, it is common to only upload when building your assets in a CI environment or during deployment. You can also omit this option, and set the `PT_UPLOAD` environment variable on a per run basis to control the upload of your stats.
+ Once you see your stats are uploading, it is common to only upload when building your assets in a CI environment or during deployment. You can also omit this option altogether, and set the `PT_UPLOAD` environment variable on a per run basis to control the upload of your stats.
 
 For example
 
