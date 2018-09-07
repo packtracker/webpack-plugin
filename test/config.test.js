@@ -14,7 +14,7 @@ describe('PacktrackerPlugin', () => {
         project_token: 'abc123'
       })
 
-      expect(plugin.report).toBe(false)
+      expect(plugin.upload).toBe(false)
       expect(plugin.host).toBe(undefined)
       expect(plugin.branch).toBe(undefined)
       expect(plugin.author).toBe(undefined)
@@ -25,15 +25,15 @@ describe('PacktrackerPlugin', () => {
       expect(execSync).not.toHaveBeenCalled()
     })
 
-    test('default reporting', () => {
+    test('default uploading', () => {
       execSync.mockReturnValue('default')
 
       const plugin = new PacktrackerPlugin({
-        report: true,
+        upload: true,
         project_token: 'abc123'
       })
 
-      expect(plugin.report).toBe(true)
+      expect(plugin.upload).toBe(true)
       expect(plugin.projectToken).toEqual('abc123')
       expect(plugin.host).toEqual('https://api.packtracker.io')
       expect(plugin.branch).toEqual('default')
@@ -46,7 +46,7 @@ describe('PacktrackerPlugin', () => {
     })
 
     test('env variables', () => {
-      process.env.PT_REPORT = 'true'
+      process.env.PT_UPLOAD = 'true'
       process.env.PT_PROJECT_TOKEN = 'abc123'
       process.env.PT_HOST = 'http://custom.host'
       process.env.PT_BRANCH = 'branch'
@@ -58,7 +58,7 @@ describe('PacktrackerPlugin', () => {
 
       const plugin = new PacktrackerPlugin()
 
-      expect(plugin.report).toBe(true)
+      expect(plugin.upload).toBe(true)
       expect(plugin.projectToken).toEqual('abc123')
       expect(plugin.host).toEqual('http://custom.host')
       expect(plugin.branch).toEqual('branch')
@@ -72,7 +72,7 @@ describe('PacktrackerPlugin', () => {
 
     test('arguments', () => {
       const plugin = new PacktrackerPlugin({
-        report: true,
+        upload: true,
         project_token: 'abc123',
         host: 'https://fake.host',
         branch: 'master',
@@ -83,7 +83,7 @@ describe('PacktrackerPlugin', () => {
         prior_commit: '4a47653d5fc58fc62757c6b815e715ec77c8ee2e'
       })
 
-      expect(plugin.report).toBe(true)
+      expect(plugin.upload).toBe(true)
       expect(plugin.projectToken).toEqual('abc123')
       expect(plugin.host).toEqual('https://fake.host')
       expect(plugin.branch).toEqual('master')

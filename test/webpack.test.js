@@ -24,7 +24,7 @@ tiny.put.mockResolvedValue({
 console.log = jest.fn()
 
 const plugin = new PacktrackerPlugin({
-  report: true,
+  upload: true,
   project_token: 'abc123',
   host: 'https://fake.host',
   branch: 'master',
@@ -83,7 +83,7 @@ describe('PacktrackerPlugin', () => {
     })
   })
 
-  test('webpack@4 short circut reporting', (done) => {
+  test('webpack@4 short circut uploading', (done) => {
     webpack4({
       entry: path.resolve(__dirname, 'files/entry.js'),
       output: {
@@ -91,7 +91,7 @@ describe('PacktrackerPlugin', () => {
         filename: 'bundle.js'
       },
       plugins: [
-        new PacktrackerPlugin({ report: false })
+        new PacktrackerPlugin({ upload: false })
       ]
     }, (err, stats) => {
       if (err) return done(err)

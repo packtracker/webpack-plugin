@@ -12,7 +12,7 @@ module.exports = {
     }).then(response => response.body)
   },
 
-  upload (url, data) {
+  uploadToS3 (url, data) {
     return tiny.put({
       url,
       data,

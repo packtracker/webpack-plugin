@@ -1,10 +1,10 @@
 const { execSync } = require('child_process')
-const { generateUploadUrl, upload } = require('./lib')
+const { generateUploadUrl, uploadToS3 } = require('./lib')
 
 function PacktrackerPlugin (options = {}) {
-  this.report = options.report || process.env.PT_REPORT === 'true' || false
+  this.upload = options.upload || process.env.PT_UPLOAD === 'true' || false
 
-  if (this.report) {
+  if (this.upload) {
     this.projectToken = options.project_token || process.env.PT_PROJECT_TOKEN
 
     this.host = options.host ||
@@ -38,11 +38,10 @@ function PacktrackerPlugin (options = {}) {
 }
 
 PacktrackerPlugin.prototype.apply = function (compiler) {
-  if (!this.report) return
+  if (!this.upload) return
 
-  const report = (stats) => {
+  const upload = (stats) => {
     const json = stats.toJson({ source: false })
-
     if (json.errors.length) return
 
     const payload = {
@@ -59,7 +58,7 @@ PacktrackerPlugin.prototype.apply = function (compiler) {
     return generateUploadUrl(this.host, this.projectToken, this.commit)
       .then(response => {
         payload.project_id = response.project_id
-        return upload(response.upload_url, payload)
+        return uploadToS3(response.upload_url, payload)
       })
       .then(() => {
         console.log('Packtracker stats uploaded!')
@@ -71,10 +70,10 @@ PacktrackerPlugin.prototype.apply = function (compiler) {
   }
 
   if (compiler.hooks) {
-    compiler.hooks.done.tapPromise('packtracker', report)
+    compiler.hooks.done.tapPromise('packtracker', upload)
   } else {
     compiler.plugin('emit', (currentCompiler, done) => {
-      report(currentCompiler.getStats()).then(done)
+      upload(currentCompiler.getStats()).then(done)
     })
   }
 }
