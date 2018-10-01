@@ -6,6 +6,7 @@
 
 [![Build Status](https://travis-ci.org/packtracker/webpack-plugin.svg?branch=master)](https://travis-ci.org/packtracker/webpack-plugin)
 [![Coverage Status](https://coveralls.io/repos/github/packtracker/webpack-plugin/badge.svg?branch=master)](https://coveralls.io/github/packtracker/webpack-plugin?branch=master)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/f5b7e125eb6b427ea2dcf0e628705dc2)](https://www.codacy.com/app/jondavidjohn/webpack-plugin?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=packtracker/webpack-plugin&amp;utm_campaign=Badge_Grade)
 
 This plugin is designed to upload your webpack build stats to the [packtracker.io](https://packtracker.io) service.
 
