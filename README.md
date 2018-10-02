@@ -1,5 +1,5 @@
 <p align="center">
-  <img width="250" height="250" src="https://user-images.githubusercontent.com/401520/45194786-2554ac00-b21a-11e8-9575-68407609d8e4.png">
+  <img width="125" height="125" src="https://user-images.githubusercontent.com/401520/46344408-a24f2780-c606-11e8-991b-579047b2cf95.png">
 </p>
 
 # packtracker.io webpack plugin
