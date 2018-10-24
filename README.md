@@ -67,12 +67,12 @@ Here is a listing of the plugin options, environment variable counterparts, and 
 | Option         | Env Variable       | Description
 |----------------|--------------------|------------
 |`project_token` | `PT_PROJECT_TOKEN` | The project token for your packtracker.io project (required)
-|`fail_build`    | `PT_FAIL_BUILD`    | Fail the webpack build if the stat upload fails (default: `false`)
-|`branch`        | `PT_BRANCH`        | The branch of the current commit (default: from `git rev-parse --abbrev-ref HEAD`)
-|`author`        | `PT_AUTHOR`        | The email of the committer (default: from `git log --format="%aE" -n 1 HEAD`)
-|`message`       | `PT_MESSAGE`       | The commit message (default: from `git log --format="%B" -n 1 HEAD`)
-|`commit`        | `PT_COMMIT`        | The commit sha (default: from `git rev-parse HEAD`)
-|`committed_at`  | `PT_COMMITTED_AT`  | The unix timestamp (ms) when this commit took place (default: from `git log --format="%ct" -n 1 HEAD`)
-|`prior_commit`  | `PT_PRIOR_COMMIT`  | The previous commit sha (default: from `git rev-parse HEAD^`)
+|`fail_build`    | `PT_FAIL_BUILD`    | Fail the build if the stat upload fails (default: `false`)
+|`branch`        | `PT_BRANCH`        | Branch of the commit <br> (default: `git rev-parse --abbrev-ref HEAD`)
+|`author`        | `PT_AUTHOR`        | Committer's email (default: `git log --format="%aE" -n 1 HEAD`)
+|`message`       | `PT_MESSAGE`       | The commit message (default: `git log --format="%B" -n 1 HEAD`)
+|`commit`        | `PT_COMMIT`        | The commit sha (default: `git rev-parse HEAD`)
+|`committed_at`  | `PT_COMMITTED_AT`  | Unix timestamp (ms) of the commit <br> (default: `git log --format="%ct" -n 1 HEAD`)
+|`prior_commit`  | `PT_PRIOR_COMMIT`  | The previous commit sha (default: `git rev-parse HEAD^`)
 
 You can find more documentation about the packtracker.io service in general at [https://docs.packtracker.io](https://docs.packtracker.io)
