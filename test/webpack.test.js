@@ -160,7 +160,6 @@ function expectations (stats) {
 
   expect(tiny.put).toHaveBeenCalledWith({
     url: 'http://upload.url',
-    headers: { 'Content-Length': expect.any(Number) },
     data: {
       packer: 'webpack@' + stats.version,
       commit: '07db3813141ca398ffe8cd07cf71769195abe8a3',

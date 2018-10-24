@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.1.1]
+
+### Changed
+- [Update tiny-json-http to handle multi-byte characters in the json payload, for real](https://github.com/packtracker/webpack-plugin/pull/3/files)
+
 ## [1.1.0]
 
 ### Added
