@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.1.0]
+
 ### Added
 - [Add an option to fail the webpack build if the stat upload fails](https://github.com/packtracker/webpack-plugin/pull/2/files).
 
