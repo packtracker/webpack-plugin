@@ -11,6 +11,10 @@ function PacktrackerPlugin (options = {}) {
       process.env.PT_HOST ||
       'https://api.packtracker.io'
 
+    this.fail_build = options.fail_build ||
+      process.env.PT_FAIL_BUILD === 'true' ||
+      false
+
     this.branch = options.branch ||
       process.env.PT_BRANCH ||
       runShell('git rev-parse --abbrev-ref HEAD')
@@ -55,7 +59,7 @@ PacktrackerPlugin.prototype.apply = function (compiler) {
       stats: json
     }
 
-    return generateUploadUrl(this.host, this.projectToken, this.commit)
+    const generate = generateUploadUrl(this.host, this.projectToken, this.commit)
       .then(response => {
         payload.project_id = response.project_id
         return uploadToS3(response.upload_url, payload)
@@ -63,7 +67,10 @@ PacktrackerPlugin.prototype.apply = function (compiler) {
       .then(() => {
         console.log('Packtracker stats uploaded!')
       })
-      .catch((error) => {
+
+    return this.fail_build
+      ? generate
+      : generate.catch((error) => {
         console.error(`Packtracker stats failed to upload: ${error.message}`)
         console.error(error)
       })
