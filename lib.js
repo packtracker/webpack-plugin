@@ -13,12 +13,6 @@ module.exports = {
   },
 
   uploadToS3 (url, data) {
-    return tiny.put({
-      url,
-      data,
-      headers: {
-        'Content-Length': Buffer.byteLength(JSON.stringify(data))
-      }
-    })
+    return tiny.put({ url, data })
   }
 }
