@@ -4583,9 +4583,9 @@ timers-browserify@^2.0.4:
   dependencies:
     setimmediate "^1.0.4"
 
-tiny-json-http@^7.0.1:
-  version "7.0.1"
-  resolved "https://registry.yarnpkg.com/tiny-json-http/-/tiny-json-http-7.0.1.tgz#775247b4a193fb291f3c908af6b6571cb68d5550"
+tiny-json-http@^7.0.2:
+  version "7.0.2"
+  resolved "https://registry.yarnpkg.com/tiny-json-http/-/tiny-json-http-7.0.2.tgz#be5a52d75d4a92046bc1c5c99a928b49eee1cd6b"
 
 tmpl@1.0.x:
   version "1.0.4"
