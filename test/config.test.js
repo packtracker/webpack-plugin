@@ -16,6 +16,7 @@ describe('PacktrackerPlugin', () => {
 
       expect(plugin.upload).toBe(false)
       expect(plugin.host).toBe(undefined)
+      expect(plugin.fail_build).toBe(undefined)
       expect(plugin.branch).toBe(undefined)
       expect(plugin.author).toBe(undefined)
       expect(plugin.message).toBe(undefined)
@@ -36,6 +37,7 @@ describe('PacktrackerPlugin', () => {
       expect(plugin.upload).toBe(true)
       expect(plugin.projectToken).toEqual('abc123')
       expect(plugin.host).toEqual('https://api.packtracker.io')
+      expect(plugin.fail_build).toEqual(false)
       expect(plugin.branch).toEqual('default')
       expect(plugin.author).toEqual('default')
       expect(plugin.message).toEqual('default')
@@ -49,6 +51,7 @@ describe('PacktrackerPlugin', () => {
       process.env.PT_UPLOAD = 'true'
       process.env.PT_PROJECT_TOKEN = 'abc123'
       process.env.PT_HOST = 'http://custom.host'
+      process.env.PT_FAIL_BUILD = 'true'
       process.env.PT_BRANCH = 'branch'
       process.env.PT_AUTHOR = 'email@author.com'
       process.env.PT_MESSAGE = 'Some message.'
@@ -61,6 +64,7 @@ describe('PacktrackerPlugin', () => {
       expect(plugin.upload).toBe(true)
       expect(plugin.projectToken).toEqual('abc123')
       expect(plugin.host).toEqual('http://custom.host')
+      expect(plugin.fail_build).toEqual(true)
       expect(plugin.branch).toEqual('branch')
       expect(plugin.author).toEqual('email@author.com')
       expect(plugin.message).toEqual('Some message.')
@@ -75,6 +79,7 @@ describe('PacktrackerPlugin', () => {
         upload: true,
         project_token: 'abc123',
         host: 'https://fake.host',
+        fail_build: true,
         branch: 'master',
         author: 'jane@doe.com',
         message: 'This is a commit message',
@@ -86,6 +91,7 @@ describe('PacktrackerPlugin', () => {
       expect(plugin.upload).toBe(true)
       expect(plugin.projectToken).toEqual('abc123')
       expect(plugin.host).toEqual('https://fake.host')
+      expect(plugin.fail_build).toEqual(true)
       expect(plugin.branch).toEqual('master')
       expect(plugin.author).toEqual('jane@doe.com')
       expect(plugin.message).toEqual('This is a commit message')

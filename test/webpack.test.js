@@ -23,17 +23,20 @@ tiny.put.mockResolvedValue({
 
 console.log = jest.fn()
 
-const plugin = new PacktrackerPlugin({
-  upload: true,
-  project_token: 'abc123',
-  host: 'https://fake.host',
-  branch: 'master',
-  author: 'jane@doe.com',
-  message: 'This is a commit message',
-  commit: '07db3813141ca398ffe8cd07cf71769195abe8a3',
-  committed_at: '1534978373',
-  prior_commit: '4a47653d5fc58fc62757c6b815e715ec77c8ee2e'
-})
+function plugin (options = {}) {
+  return new PacktrackerPlugin(Object.assign({
+    upload: true,
+    project_token: 'abc123',
+    host: 'https://fake.host',
+    fail_build: false,
+    branch: 'master',
+    author: 'jane@doe.com',
+    message: 'This is a commit message',
+    commit: '07db3813141ca398ffe8cd07cf71769195abe8a3',
+    committed_at: '1534978373',
+    prior_commit: '4a47653d5fc58fc62757c6b815e715ec77c8ee2e'
+  }, options))
+}
 
 describe('PacktrackerPlugin', () => {
   beforeEach(() => jest.clearAllMocks())
@@ -45,7 +48,7 @@ describe('PacktrackerPlugin', () => {
         path: path.resolve(__dirname, 'files/output'),
         filename: 'bundle.js'
       },
-      plugins: [ plugin ]
+      plugins: [ plugin() ]
     }, (err, stats) => {
       if (err) return done(err)
       expectations(stats)
@@ -60,7 +63,7 @@ describe('PacktrackerPlugin', () => {
         path: path.resolve(__dirname, 'files/output'),
         filename: 'bundle.js'
       },
-      plugins: [ plugin ]
+      plugins: [ plugin() ]
     }, (err, stats) => {
       if (err) return done(err)
       expectations(stats)
@@ -75,7 +78,7 @@ describe('PacktrackerPlugin', () => {
         path: path.resolve(__dirname, 'files/output'),
         filename: 'bundle.js'
       },
-      plugins: [ plugin ]
+      plugins: [ plugin() ]
     }, (err, stats) => {
       if (err) return done(err)
       expectations(stats)
@@ -91,7 +94,7 @@ describe('PacktrackerPlugin', () => {
         filename: 'bundle.js'
       },
       plugins: [
-        new PacktrackerPlugin({ upload: false })
+        plugin({ upload: false })
       ]
     }, (err, stats) => {
       if (err) return done(err)
@@ -113,11 +116,32 @@ describe('PacktrackerPlugin', () => {
         path: path.resolve(__dirname, 'files/output'),
         filename: 'bundle.js'
       },
-      plugins: [ plugin ]
+      plugins: [ plugin() ]
     }, (err, stats) => {
       expect(err).toBe(null)
       expect(console.error).toHaveBeenCalledWith('Packtracker stats failed to upload: Error')
       expect(console.error).toHaveBeenCalledWith(error)
+      done()
+    })
+  })
+
+  test('webpack@4 failed to upload with fail build option', (done) => {
+    console.error = jest.fn()
+    const error = new Error('Error')
+    tiny.post.mockRejectedValue(error)
+
+    webpack4({
+      entry: path.resolve(__dirname, 'files/entry.js'),
+      output: {
+        path: path.resolve(__dirname, 'files/output'),
+        filename: 'bundle.js'
+      },
+      plugins: [ plugin({ fail_build: true }) ]
+    }, (err, stats) => {
+      expect(err).toBeInstanceOf(Error)
+      expect(err.message).toBe('Error')
+      expect(console.error).not.toHaveBeenCalledWith('Packtracker stats failed to upload: Error')
+      expect(console.error).not.toHaveBeenCalledWith(error)
       done()
     })
   })
