@@ -27,6 +27,6 @@
     "webpack": ">= 2.0.0"
   },
   "dependencies": {
-    "tiny-json-http": "^7.0.0"
+    "tiny-json-http": "^7.0.1"
   }
 }
