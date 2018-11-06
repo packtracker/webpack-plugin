@@ -1,8 +1,14 @@
 {
   "name": "@packtracker/webpack-plugin",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "description": "Upload your webpack build stats to the packtracker.io service for greater visiblity into the artifacts you're delivering to your customers.",
-  "keywords": ["webpack", "stats", "packtracker", "bundle analyzer", "bundle"],
+  "keywords": [
+    "webpack",
+    "stats",
+    "packtracker",
+    "bundle analyzer",
+    "bundle"
+  ],
   "homepage": "https://app.packtracker.io",
   "repository": "github:packtracker/webpack-plugin",
   "license": "MIT",
