@@ -100,5 +100,15 @@ describe('PacktrackerPlugin', () => {
       expect(plugin.priorCommit).toEqual('4a47653d5fc58fc62757c6b815e715ec77c8ee2e')
       expect(execSync).not.toHaveBeenCalled()
     })
+
+    test('HEAD prevention', () => {
+      expect(() => {
+        const plugin = new PacktrackerPlugin({ // eslint-disable-line
+          upload: true,
+          project_token: 'abc123',
+          branch: 'HEAD'
+        })
+      }).toThrow()
+    })
   })
 })
