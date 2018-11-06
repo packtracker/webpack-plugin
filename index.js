@@ -19,6 +19,10 @@ function PacktrackerPlugin (options = {}) {
       process.env.PT_BRANCH ||
       runShell('git rev-parse --abbrev-ref HEAD')
 
+    if (this.branch === 'HEAD') {
+      throw new Error('Not able to determine branch name with git, please provide it manually via config options: https://docs.packtracker.io/faq#why-cant-the-plugin-determine-my-branch-name')
+    }
+
     this.author = options.author ||
       process.env.PT_AUTHOR ||
       runShell('git log --format="%aE" -n 1 HEAD')
