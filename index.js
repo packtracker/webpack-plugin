@@ -58,8 +58,6 @@ PacktrackerPlugin.prototype.apply = function (compiler) {
       ? null
       : compiler.outputPath
 
-    console.log(util.inspect(compiler))
-
     const json = stats.toJson(this.statOptions)
     if (json.errors.length) return
 
