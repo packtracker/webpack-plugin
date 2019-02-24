@@ -56,7 +56,7 @@ PacktrackerPlugin.prototype.apply = function (compiler) {
     ? null
     : compiler.outputPath
 
-  console.log('directory!', directory)
+  console.log(JSON.stringify(compiler, null, 2))
 
   const upload = (stats) => {
     const json = stats.toJson(this.statOptions)
