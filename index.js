@@ -1,4 +1,3 @@
-const util = require('util')
 const { execSync } = require('child_process')
 const { generateUploadUrl, uploadToS3 } = require('./lib')
 const { getViewerData } = require('webpack-bundle-analyzer/lib/analyzer')
