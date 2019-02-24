@@ -53,16 +53,12 @@ function PacktrackerPlugin (options = {}) {
 PacktrackerPlugin.prototype.apply = function (compiler) {
   if (!this.upload) return
 
-  const upload = (stats, comp) => {
-    let directory = ''
+  const upload = (stats) => {
+    const directory = (compiler.outputFileSystem.constructor.name === 'MemoryFileSystem')
+      ? null
+      : compiler.outputPath
 
-    if (comp) {
-      directory = (comp.outputFileSystem.constructor.name === 'MemoryFileSystem')
-        ? null
-        : comp.outputPath
-
-      console.log(util.inspect(comp))
-    }
+    console.log(util.inspect(compiler))
 
     const json = stats.toJson(this.statOptions)
     if (json.errors.length) return
@@ -100,7 +96,7 @@ PacktrackerPlugin.prototype.apply = function (compiler) {
     compiler.hooks.done.tapPromise('packtracker', upload)
   } else {
     compiler.plugin('emit', (currentCompiler, done) => {
-      upload(currentCompiler.getStats(), currentCompiler).then(done)
+      upload(currentCompiler.getStats()).then(done)
     })
   }
 }
