@@ -93,8 +93,8 @@ PacktrackerPlugin.prototype.apply = function (compiler) {
   if (compiler.hooks) {
     compiler.hooks.done.tapPromise('packtracker', upload)
   } else {
-    compiler.plugin('done', (stats, done) => {
-      upload(stats).then(done)
+    compiler.plugin('afterEmit', (currentCompiler, done) => {
+      upload(currentCompiler.getStats()).then(done)
     })
   }
 }
