@@ -1,3 +1,4 @@
+const util = require('util')
 const { execSync } = require('child_process')
 const { generateUploadUrl, uploadToS3 } = require('./lib')
 const { getViewerData } = require('webpack-bundle-analyzer/lib/analyzer')
@@ -56,7 +57,7 @@ PacktrackerPlugin.prototype.apply = function (compiler) {
     ? null
     : compiler.outputPath
 
-  console.log(JSON.stringify(compiler, null, 2))
+  console.log(util.inspect(compiler))
 
   const upload = (stats) => {
     const json = stats.toJson(this.statOptions)
