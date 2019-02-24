@@ -169,7 +169,8 @@ function expectations (stats) {
       message: 'This is a commit message',
       prior_commit: '4a47653d5fc58fc62757c6b815e715ec77c8ee2e',
       project_id: 'project-id',
-      stats: expect.any(Object)
+      stats: expect.any(Object),
+      bundle: expect.any(Object)
     }
   })
 

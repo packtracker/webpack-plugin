@@ -15,13 +15,14 @@ describe('PacktrackerPlugin', () => {
       })
 
       expect(plugin.upload).toBe(false)
+      expect(plugin.excludeAssets).toBe(undefined)
       expect(plugin.host).toBe(undefined)
-      expect(plugin.fail_build).toBe(undefined)
+      expect(plugin.failBuild).toBe(undefined)
       expect(plugin.branch).toBe(undefined)
       expect(plugin.author).toBe(undefined)
       expect(plugin.message).toBe(undefined)
       expect(plugin.commit).toBe(undefined)
-      expect(plugin.committed_at).toBe(undefined)
+      expect(plugin.committedAt).toBe(undefined)
       expect(plugin.priorCommit).toBe(undefined)
       expect(execSync).not.toHaveBeenCalled()
     })
@@ -35,14 +36,15 @@ describe('PacktrackerPlugin', () => {
       })
 
       expect(plugin.upload).toBe(true)
+      expect(plugin.excludeAssets).toBe(undefined)
       expect(plugin.projectToken).toEqual('abc123')
       expect(plugin.host).toEqual('https://api.packtracker.io')
-      expect(plugin.fail_build).toEqual(false)
+      expect(plugin.failBuild).toEqual(false)
       expect(plugin.branch).toEqual('default')
       expect(plugin.author).toEqual('default')
       expect(plugin.message).toEqual('default')
       expect(plugin.commit).toEqual('default')
-      expect(plugin.committed_at).toEqual('default')
+      expect(plugin.committedAt).toEqual('default')
       expect(plugin.priorCommit).toEqual('default')
       expect(execSync).toHaveBeenCalled()
     })
@@ -62,19 +64,22 @@ describe('PacktrackerPlugin', () => {
       const plugin = new PacktrackerPlugin()
 
       expect(plugin.upload).toBe(true)
+      expect(plugin.excludeAssets).toBe(undefined)
       expect(plugin.projectToken).toEqual('abc123')
       expect(plugin.host).toEqual('http://custom.host')
-      expect(plugin.fail_build).toEqual(true)
+      expect(plugin.failBuild).toEqual(true)
       expect(plugin.branch).toEqual('branch')
       expect(plugin.author).toEqual('email@author.com')
       expect(plugin.message).toEqual('Some message.')
       expect(plugin.commit).toEqual('07db3813141ca398ffe8cd07cf71769195abe8a3')
-      expect(plugin.committed_at).toEqual('1534978373')
+      expect(plugin.committedAt).toEqual('1534978373')
       expect(plugin.priorCommit).toEqual('4a47653d5fc58fc62757c6b815e715ec77c8ee2e')
       expect(execSync).not.toHaveBeenCalled()
     })
 
     test('arguments', () => {
+      const exclude = jest.fn()
+
       const plugin = new PacktrackerPlugin({
         upload: true,
         project_token: 'abc123',
@@ -85,18 +90,20 @@ describe('PacktrackerPlugin', () => {
         message: 'This is a commit message',
         commit: '07db3813141ca398ffe8cd07cf71769195abe8a3',
         committed_at: '1534978373',
-        prior_commit: '4a47653d5fc58fc62757c6b815e715ec77c8ee2e'
+        prior_commit: '4a47653d5fc58fc62757c6b815e715ec77c8ee2e',
+        exclude_assets: exclude
       })
 
       expect(plugin.upload).toBe(true)
+      expect(plugin.excludeAssets).toBe(exclude)
       expect(plugin.projectToken).toEqual('abc123')
       expect(plugin.host).toEqual('https://fake.host')
-      expect(plugin.fail_build).toEqual(true)
+      expect(plugin.failBuild).toEqual(true)
       expect(plugin.branch).toEqual('master')
       expect(plugin.author).toEqual('jane@doe.com')
       expect(plugin.message).toEqual('This is a commit message')
       expect(plugin.commit).toEqual('07db3813141ca398ffe8cd07cf71769195abe8a3')
-      expect(plugin.committed_at).toEqual('1534978373')
+      expect(plugin.committedAt).toEqual('1534978373')
       expect(plugin.priorCommit).toEqual('4a47653d5fc58fc62757c6b815e715ec77c8ee2e')
       expect(execSync).not.toHaveBeenCalled()
     })
