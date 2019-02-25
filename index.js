@@ -69,7 +69,7 @@ PacktrackerPlugin.prototype.apply = function (compiler) {
       message: this.message,
       prior_commit: this.priorCommit,
       stats: json,
-      bundle: getBundleData(json, directory, this.excludeAssets)
+      bundle: getBundleData(stats.toJson(this.statOptions), directory, this.excludeAssets)
     }
 
     const generate = generateUploadUrl(this.host, this.projectToken, this.commit)
@@ -92,13 +92,8 @@ PacktrackerPlugin.prototype.apply = function (compiler) {
   if (compiler.hooks) {
     compiler.hooks.done.tapPromise('packtracker', upload)
   } else {
-    compiler.plugin('emit', (compiler, done) => {
-      this.stats = compiler.getStats()
-      done()
-    })
-
     compiler.plugin('after-emit', (compilation, done) => {
-      upload(this.stats).then(done)
+      upload(compilation.getStats()).then(done)
     })
   }
 }
