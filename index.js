@@ -1,7 +1,5 @@
 const { execSync } = require('child_process')
-const { generateUploadUrl, uploadToS3 } = require('./lib')
-const { getViewerData } = require('webpack-bundle-analyzer/lib/analyzer')
-const { isPlainObject, isEmpty } = require('lodash')
+const { getBundleData, generateUploadUrl, uploadToS3 } = require('./lib')
 
 function PacktrackerPlugin (options = {}) {
   this.upload = options.upload || process.env.PT_UPLOAD === 'true' || false
@@ -69,7 +67,11 @@ PacktrackerPlugin.prototype.apply = function (compiler) {
       message: this.message,
       prior_commit: this.priorCommit,
       stats: json,
-      bundle: getBundleData(stats.toJson(this.statOptions), directory, this.excludeAssets)
+      bundle: getBundleData(
+        stats.toJson(this.statOptions),
+        directory,
+        this.excludeAssets
+      )
     }
 
     const generate = generateUploadUrl(this.host, this.projectToken, this.commit)
@@ -100,25 +102,6 @@ PacktrackerPlugin.prototype.apply = function (compiler) {
 
 function runShell (command) {
   return execSync(command).toString().trim()
-}
-
-function getBundleData (statJson, directory, excludeAssets = null) {
-  let bundleData
-
-  try {
-    bundleData = getViewerData(statJson, directory, { excludeAssets })
-  } catch (err) {
-    console.error(`Could't analyze webpack bundle:\n${err}`)
-    console.error(err.stack)
-    bundleData = null
-  }
-
-  if (isPlainObject(bundleData) && isEmpty(bundleData)) {
-    console.error("Could't find any javascript bundles")
-    bundleData = null
-  }
-
-  return bundleData
 }
 
 module.exports = PacktrackerPlugin
