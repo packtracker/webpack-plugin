@@ -73,12 +73,11 @@ The only caveat to using the CLI is that you **must** use environment variables 
 In your `package.json` you can add a run script like the following
 
 ```json
-  ...
+{
   "scripts": {
-    ...
     "packtracker": "react-scripts build --stats && packtracker-upload --stats=build/bundle-stats.json"
-  },
-  ...
+  }
+}
 ```
 
 The only additional parameter you can pass via the CLI is the `--output-path=<path to webpack output>`, if it is not passed we assume it is the directory that contains your bundle-stats.
@@ -102,6 +101,6 @@ Here is a listing of the plugin options, environment variable counterparts, and 
 |`commit`         | `PT_COMMIT`        | The commit sha (default: `git rev-parse HEAD`)
 |`committed_at`   | `PT_COMMITTED_AT`  | Unix timestamp (ms) of the commit <br> (default: `git log --format="%ct" -n 1 HEAD`)
 |`prior_commit`   | `PT_PRIOR_COMMIT`  | The previous commit sha (default: `git rev-parse HEAD^`)
-|`exclude_assets` | --                 | Mirrors the excludeAssets configuration for webpack stats (only available to webpack version 3.5.0+)
+|`exclude_assets` | --                 | Mirrors the [excludeAssets configuration in the webpack stats config](https://webpack.js.org/configuration/stats/#stats) (only available to webpack version 3.5.0+)
 
 You can find more documentation about the packtracker.io service in general at [https://docs.packtracker.io](https://docs.packtracker.io)
