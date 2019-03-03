@@ -34,6 +34,7 @@
   },
   "dependencies": {
     "lodash": "^4.17.11",
+    "omit-deep": "^0.3.0",
     "tiny-json-http": "^7.0.2",
     "webpack-bundle-analyzer": "^3.0.4"
   }
