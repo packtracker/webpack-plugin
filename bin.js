@@ -23,10 +23,7 @@ const config = new Config({ upload: true, fail_build: true })
 const upload = new Upload(config)
 
 upload.process(stats, outputPath)
-  .then(() => {
-    console.log('Stats Uploaded!')
-    process.exit(0)
-  })
+  .then(() => process.exit(0))
   .catch((err) => {
     console.error('There was a problem uploading your stats.')
     console.error(err)
