@@ -1,6 +1,7 @@
 const tiny = require('tiny-json-http')
 const { getViewerData } = require('webpack-bundle-analyzer/lib/analyzer')
 const { isPlainObject, isEmpty, cloneDeep } = require('lodash')
+const omitDeep = require('omit-deep')
 
 class Upload {
   constructor (config) {
@@ -9,6 +10,9 @@ class Upload {
 
   process (statsJson, outputPath) {
     if (statsJson.errors.length) return
+
+    // Ensure we're not capturing the source
+    statsJson = omitDeep(statsJson, ['source'])
 
     const payload = {
       packer: 'webpack@' + statsJson.version,
