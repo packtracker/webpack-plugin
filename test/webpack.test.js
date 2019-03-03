@@ -73,6 +73,7 @@ describe('PacktrackerPlugin', () => {
 
   test('webpack@4', (done) => {
     webpack4({
+      mode: 'production',
       entry: path.resolve(__dirname, 'files/entry.js'),
       output: {
         path: path.resolve(__dirname, 'files/output'),
@@ -88,6 +89,7 @@ describe('PacktrackerPlugin', () => {
 
   test('webpack@4 short circut uploading', (done) => {
     webpack4({
+      mode: 'production',
       entry: path.resolve(__dirname, 'files/entry.js'),
       output: {
         path: path.resolve(__dirname, 'files/output'),
@@ -111,6 +113,7 @@ describe('PacktrackerPlugin', () => {
     tiny.post.mockRejectedValue(error)
 
     webpack4({
+      mode: 'production',
       entry: path.resolve(__dirname, 'files/entry.js'),
       output: {
         path: path.resolve(__dirname, 'files/output'),
@@ -131,6 +134,7 @@ describe('PacktrackerPlugin', () => {
     tiny.post.mockRejectedValue(error)
 
     webpack4({
+      mode: 'production',
       entry: path.resolve(__dirname, 'files/entry.js'),
       output: {
         path: path.resolve(__dirname, 'files/output'),
@@ -169,7 +173,51 @@ function expectations (stats) {
       message: 'This is a commit message',
       prior_commit: '4a47653d5fc58fc62757c6b815e715ec77c8ee2e',
       project_id: 'project-id',
-      stats: expect.any(Object)
+      stats: expect.objectContaining({
+        assets: [{
+          chunkNames: ['main'],
+          chunks: [0],
+          emitted: true,
+          isOverSizeLimit: {},
+          name: 'bundle.js',
+          size: expect.any(Number)
+        }]
+      }),
+      bundle: [{
+        groups: [{
+          groups: expect.arrayContaining([{
+            gzipSize: expect.any(Number),
+            id: expect.any(Number),
+            label: 'entry.js',
+            parsedSize: expect.any(Number),
+            path: './test/files/entry.js',
+            statSize: 116
+          }, {
+            gzipSize: expect.any(Number),
+            id: expect.any(Number),
+            label: 'add.js',
+            parsedSize: expect.any(Number),
+            path: './test/files/add.js',
+            statSize: 52
+          }, {
+            gzipSize: expect.any(Number),
+            id: expect.any(Number),
+            label: 'subtract.js',
+            parsedSize: expect.any(Number),
+            path: './test/files/subtract.js',
+            statSize: 52
+          }]),
+          gzipSize: expect.any(Number),
+          label: 'test/files',
+          parsedSize: expect.any(Number),
+          path: './test/files',
+          statSize: 220
+        }],
+        gzipSize: expect.any(Number),
+        label: 'bundle.js',
+        parsedSize: expect.any(Number),
+        statSize: 220
+      }]
     }
   })
 

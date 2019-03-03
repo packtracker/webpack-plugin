@@ -1,96 +1,36 @@
-const { execSync } = require('child_process')
-const { generateUploadUrl, uploadToS3 } = require('./lib')
+const Config = require('./config')
+const Upload = require('./upload')
 
 function PacktrackerPlugin (options = {}) {
-  this.upload = options.upload || process.env.PT_UPLOAD === 'true' || false
-
-  if (this.upload) {
-    this.projectToken = options.project_token || process.env.PT_PROJECT_TOKEN
-
-    this.host = options.host ||
-      process.env.PT_HOST ||
-      'https://api.packtracker.io'
-
-    this.fail_build = options.fail_build ||
-      process.env.PT_FAIL_BUILD === 'true' ||
-      false
-
-    this.branch = options.branch ||
-      process.env.PT_BRANCH ||
-      runShell('git rev-parse --abbrev-ref HEAD')
-
-    if (this.branch === 'HEAD') {
-      throw new Error('Not able to determine branch name with git, please provide it manually via config options: https://docs.packtracker.io/faq#why-cant-the-plugin-determine-my-branch-name')
-    }
-
-    this.author = options.author ||
-      process.env.PT_AUTHOR ||
-      runShell('git log --format="%aE" -n 1 HEAD')
-
-    this.message = options.message ||
-      process.env.PT_MESSAGE ||
-      runShell('git log --format="%B" -n 1 HEAD')
-
-    this.commit = options.commit ||
-      process.env.PT_COMMIT ||
-      runShell('git rev-parse HEAD')
-
-    this.committed_at = options.committed_at ||
-      process.env.PT_COMMITTED_AT ||
-      runShell('git log --format="%ct" -n 1 HEAD')
-
-    this.priorCommit = options.prior_commit ||
-      process.env.PT_PRIOR_COMMIT ||
-      runShell('git rev-parse HEAD^')
-  }
+  this.config = new Config(options)
 }
 
 PacktrackerPlugin.prototype.apply = function (compiler) {
-  if (!this.upload) return
+  if (!this.config.upload) return
 
-  const upload = (stats) => {
-    const json = stats.toJson({ source: false })
-    if (json.errors.length) return
-
-    const payload = {
-      packer: 'webpack@' + json.version,
-      commit: this.commit,
-      committed_at: parseInt(this.committed_at),
-      branch: this.branch,
-      author: this.author,
-      message: this.message,
-      prior_commit: this.priorCommit,
-      stats: json
-    }
-
-    const generate = generateUploadUrl(this.host, this.projectToken, this.commit)
-      .then(response => {
-        payload.project_id = response.project_id
-        return uploadToS3(response.upload_url, payload)
-      })
-      .then(() => {
-        console.log('Packtracker stats uploaded!')
-      })
-
-    return this.fail_build
-      ? generate
-      : generate.catch((error) => {
-        console.error(`Packtracker stats failed to upload: ${error.message}`)
-        console.error(error)
-      })
-  }
+  this.upload = new Upload(this.config)
 
   if (compiler.hooks) {
-    compiler.hooks.done.tapPromise('packtracker', upload)
+    compiler.hooks.done.tapPromise('packtracker', (stats) => {
+      return this.upload.process(
+        stats.toJson(this.config.statOptions),
+        getOutputPath(compiler)
+      )
+    })
   } else {
-    compiler.plugin('emit', (currentCompiler, done) => {
-      upload(currentCompiler.getStats()).then(done)
+    compiler.plugin('after-emit', (compilation, done) => {
+      this.upload.process(
+        compilation.getStats().toJson(this.config.statOptions),
+        getOutputPath(compiler)
+      ).then(done)
     })
   }
 }
 
-function runShell (command) {
-  return execSync(command).toString().trim()
+function getOutputPath (compiler) {
+  return (compiler.outputFileSystem.constructor.name === 'MemoryFileSystem')
+    ? null
+    : compiler.outputPath
 }
 
 module.exports = PacktrackerPlugin
