@@ -1,6 +1,6 @@
 {
   "name": "@packtracker/webpack-plugin",
-  "version": "2.0.0-beta.17",
+  "version": "2.0.0-beta.18",
   "description": "Upload your webpack build stats to the packtracker.io service for greater visiblity into the artifacts you're delivering to your customers.",
   "keywords": [
     "webpack",
