@@ -64,11 +64,11 @@ module.exports = {
 
 ### CLI
 
-In addition to the primary use case of uploading as part of your build process via our webpack plugin, we also have a command line uploader that works well with tools like [create-react-app]() that allow you to export your stats, but don't allow full plugin configuration.
+In addition to the primary use case of uploading as part of your build process via our webpack plugin, we also have a command line uploader that works well with tools like [create-react-app](https://facebook.github.io/create-react-app/) that allow you to export your stats, but don't allow full plugin configuration.
 
 The only caveat to using the CLI is that you **must** use environment variables to configure your stat reporting (most importantly `PT_PROJECT_TOKEN`).
 
-#### Using with `create-react-app`
+#### Example with `create-react-app`
 
 In your `package.json` you can add a run script like the following
 
@@ -80,14 +80,14 @@ In your `package.json` you can add a run script like the following
 }
 ```
 
-The only additional parameter you can pass via the CLI is the `--output-path=<path to webpack output>`, if it is not passed we assume it is the directory that contains your bundle-stats.
+The only additional parameter you can pass via the CLI is the `--output-path=<path to webpack output>`, if it is not passed we assume it is the directory that contains your bundle stats file.
 
 Then running `npm run packtracker` should upload your stats to our service
 
 
 ### Options
 
-All of the options, available to the plugin can be set [via argument to the plugin, environment variable, or allowed to query your local git repository.](https://github.com/packtracker/webpack-plugin/blob/master/index.js)
+All of the options, available to the plugin can be set [via argument to the plugin, environment variable, or allowed to query your local git repository.](https://github.com/packtracker/webpack-plugin/blob/master/config.js)
 
 Here is a listing of the plugin options, environment variable counterparts, and a description.
 
