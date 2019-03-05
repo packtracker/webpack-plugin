@@ -3,6 +3,7 @@ test
 coverage
 npm-debug.log
 yarn.lock
+.nvmrc
 .travis.yml
 .eslintrc
 .coveralls.yml

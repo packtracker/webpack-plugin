@@ -1,7 +1,10 @@
 {
   "name": "@packtracker/webpack-plugin",
-  "version": "1.1.2",
+  "version": "2.0.0",
   "description": "Upload your webpack build stats to the packtracker.io service for greater visiblity into the artifacts you're delivering to your customers.",
+  "homepage": "https://app.packtracker.io",
+  "repository": "github:packtracker/webpack-plugin",
+  "license": "MIT",
   "keywords": [
     "webpack",
     "stats",
@@ -9,10 +12,13 @@
     "bundle analyzer",
     "bundle"
   ],
-  "homepage": "https://app.packtracker.io",
-  "repository": "github:packtracker/webpack-plugin",
-  "license": "MIT",
+  "engines": {
+    "node": ">= 6.14.4"
+  },
   "main": "index.js",
+  "bin": {
+    "packtracker-upload": "./bin.js"
+  },
   "scripts": {
     "lint": "standard",
     "test": "jest .test/",
@@ -33,6 +39,10 @@
     "webpack": ">= 2.0.0"
   },
   "dependencies": {
-    "tiny-json-http": "^7.0.2"
+    "lodash": "^4.17.11",
+    "minimist": "^1.2.0",
+    "omit-deep": "^0.3.0",
+    "tiny-json-http": "^7.0.2",
+    "webpack-bundle-analyzer": "^3.0.4"
   }
 }

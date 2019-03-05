@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## 2.0.0
+
+### Added
+- CLI tool! for use with create react app
+- new `exclude_assets` option to filter assets you don't want to track
+- Improved js bundle reporting by leveraging webpack-bundle-analyzer directly
+
 ## [1.1.1]
 
 ### Changed
