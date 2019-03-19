@@ -24,11 +24,14 @@ describe('PacktrackerPlugin', () => {
       expect(plugin.config.commit).toBe(undefined)
       expect(plugin.config.committedAt).toBe(undefined)
       expect(plugin.config.priorCommit).toBe(undefined)
+      expect(plugin.config.CI).toEqual({ detected: false, branch: null, commit: null, server: 'default' })
       expect(execSync).not.toHaveBeenCalled()
     })
 
     test('default uploading', () => {
       execSync.mockReturnValue('default')
+
+      process.env.CI = undefined // disable auto-detect
 
       const plugin = new PacktrackerPlugin({
         upload: true,
@@ -46,6 +49,7 @@ describe('PacktrackerPlugin', () => {
       expect(plugin.config.commit).toEqual('default')
       expect(plugin.config.committedAt).toEqual('default')
       expect(plugin.config.priorCommit).toEqual('default')
+      expect(plugin.config.CI).toEqual({ detected: false, branch: null, commit: null, server: 'default' })
       expect(execSync).toHaveBeenCalled()
     })
 
@@ -60,6 +64,8 @@ describe('PacktrackerPlugin', () => {
       process.env.PT_COMMIT = '07db3813141ca398ffe8cd07cf71769195abe8a3'
       process.env.PT_COMMITTED_AT = '1534978373'
       process.env.PT_PRIOR_COMMIT = '4a47653d5fc58fc62757c6b815e715ec77c8ee2e'
+      process.env.PT_CI_SERVER = 'default'
+      process.env.CI = undefined
 
       const plugin = new PacktrackerPlugin()
 
@@ -74,11 +80,25 @@ describe('PacktrackerPlugin', () => {
       expect(plugin.config.commit).toEqual('07db3813141ca398ffe8cd07cf71769195abe8a3')
       expect(plugin.config.committedAt).toEqual('1534978373')
       expect(plugin.config.priorCommit).toEqual('4a47653d5fc58fc62757c6b815e715ec77c8ee2e')
+      expect(plugin.config.CI).toEqual({ detected: false, branch: null, commit: null, server: 'default' })
+      expect(execSync).not.toHaveBeenCalled()
+    })
+
+    test('CI Auto-Detect', () => {
+      process.env.CI = true
+      process.env.TRAVIS = true
+      process.env.TRAVIS_BRANCH = 'branch'
+      process.env.TRAVIS_COMMIT = '07db3813141ca398ffe8cd07cf71769195abe8a3'
+
+      const plugin = new PacktrackerPlugin()
+
+      expect(plugin.config.CI).not.toEqual({ detected: false, branch: null, commit: null, server: null })
       expect(execSync).not.toHaveBeenCalled()
     })
 
     test('arguments', () => {
       const exclude = jest.fn()
+      process.env.CI = false
 
       const plugin = new PacktrackerPlugin({
         upload: true,
@@ -91,7 +111,8 @@ describe('PacktrackerPlugin', () => {
         commit: '07db3813141ca398ffe8cd07cf71769195abe8a3',
         committed_at: '1534978373',
         prior_commit: '4a47653d5fc58fc62757c6b815e715ec77c8ee2e',
-        exclude_assets: exclude
+        exclude_assets: exclude,
+        ci_server: 'default'
       })
 
       expect(plugin.config.upload).toBe(true)
@@ -105,6 +126,7 @@ describe('PacktrackerPlugin', () => {
       expect(plugin.config.commit).toEqual('07db3813141ca398ffe8cd07cf71769195abe8a3')
       expect(plugin.config.committedAt).toEqual('1534978373')
       expect(plugin.config.priorCommit).toEqual('4a47653d5fc58fc62757c6b815e715ec77c8ee2e')
+      expect(plugin.config.CI.server).toEqual('default')
       expect(execSync).not.toHaveBeenCalled()
     })
 

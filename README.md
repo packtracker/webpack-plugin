@@ -101,6 +101,7 @@ Here is a listing of the plugin options, environment variable counterparts, and 
 |`commit`         | `PT_COMMIT`        | The commit sha (default: `git rev-parse HEAD`)
 |`committed_at`   | `PT_COMMITTED_AT`  | Unix timestamp (ms) of the commit <br> (default: `git log --format="%ct" -n 1 HEAD`)
 |`prior_commit`   | `PT_PRIOR_COMMIT`  | The previous commit sha (default: `git rev-parse HEAD^`)
+|`ci_server`      | `PT_CI_SERVER`     | One of `circleci`, `codeship`, `jenkins`, `sephamore`, or `travis`
 |`exclude_assets` | --                 | Mirrors the [excludeAssets configuration in the webpack stats config](https://webpack.js.org/configuration/stats/#stats) (only available to webpack version 3.5.0+)
 
 You can find more documentation about the packtracker.io service in general at [https://docs.packtracker.io](https://docs.packtracker.io)
