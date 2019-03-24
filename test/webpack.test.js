@@ -87,7 +87,7 @@ describe('PacktrackerPlugin', () => {
     })
   })
 
-  test('webpack@4 short circut uploading', (done) => {
+  test('webpack@4 short circuit uploading', (done) => {
     webpack4({
       mode: 'production',
       entry: path.resolve(__dirname, 'files/entry.js'),

@@ -58,13 +58,13 @@ function getBundleData (statJson, outputPath, excludeAssets = null) {
   try {
     data = getViewerData(statJson, outputPath, { excludeAssets })
   } catch (err) {
-    console.error(`Could't analyze webpack bundle:\n${err}`)
+    console.error(`Could not analyze webpack bundle:\n${err}`)
     console.error(err.stack)
     data = null
   }
 
   if (isPlainObject(data) && isEmpty(data)) {
-    console.error("Could't find any javascript bundles")
+    console.error('Could not find any javascript bundles')
     data = null
   }
 
