@@ -70,6 +70,7 @@ function runShell (command) {
 
 function detectCI (CI) {
   const CI_EV = {
+    default: { branch: null, commit: null },
     circleci: { branch: process.env.CIRCLE_BRANCH, commit: process.env.CIRCLE_SHA1 },
     codeship: { branch: process.env.CI_BRANCH, commit: process.env.CI_COMMIT_ID },
     jenkins: { branch: process.env.GIT_BRANCH, commit: process.env.GIT_COMMIT },
@@ -92,27 +93,22 @@ function detectCI (CI) {
 
   CI.server = validateCI(CI.server)
 
-  if (CI.server !== 'default') {
-    CI.detected = true
-    CI.branch = CI_EV[CI.server].branch
-    CI.commit = CI_EV[CI.server].commit
-  }
+  CI.detected = CI.server !== 'default'
+  CI.branch = CI_EV[CI.server].branch
+  CI.commit = CI_EV[CI.server].commit
 
   return CI
 }
 
 function validateCI (server) {
   server = server.toLowerCase()
+  const servers = ['default', 'circleci', 'codeship', 'jenkins', 'semaphore', 'travis']
 
-  if (!`circleci,
-        codeship,
-        jenkins,
-        semaphore,
-        travis,
-        default`.includes(server)) {
-    server = 'default'
+  if (servers.some(serversVal => server === serversVal)) {
+    return server
   }
-  return server
+
+  return servers[0]
 }
 
 module.exports = Config
