@@ -215,6 +215,7 @@ function expectations (stats) {
         }],
         gzipSize: expect.any(Number),
         label: 'bundle.js',
+        isAsset: true,
         parsedSize: expect.any(Number),
         statSize: 220
       }]
