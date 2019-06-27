@@ -2,6 +2,7 @@
 
 const { execSync } = require('child_process')
 const PacktrackerPlugin = require('../')
+const OptionsError = require('../options_error')
 
 jest.mock('child_process')
 
@@ -25,6 +26,34 @@ describe('PacktrackerPlugin', () => {
       expect(plugin.config.committedAt).toBe(undefined)
       expect(plugin.config.priorCommit).toBe(undefined)
       expect(execSync).not.toHaveBeenCalled()
+    })
+
+    test('uploading with failing shell out to git', () => {
+      execSync.mockImplementation(() => {
+        throw new Error('error message')
+      })
+
+      expect(() => {
+        const plugin = new PacktrackerPlugin({
+          upload: true,
+          project_token: 'abc123'
+        })
+
+        expect(plugin).toBe(undefined)
+      }).toThrowError(OptionsError)
+    })
+
+    test('uploading with missing required options', () => {
+      execSync.mockReturnValue('')
+
+      expect(() => {
+        const plugin = new PacktrackerPlugin({
+          upload: true,
+          project_token: 'abc123'
+        })
+
+        expect(plugin).toBe(undefined)
+      }).toThrowError(OptionsError)
     })
 
     test('default uploading', () => {
