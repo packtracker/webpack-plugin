@@ -30,7 +30,7 @@ class Upload {
       )
     }
 
-    const generate = generateUploadUrl(
+    return generateUploadUrl(
       this.config.host,
       this.config.projectToken,
       this.config.commit
@@ -42,12 +42,13 @@ class Upload {
       .then(() => {
         console.log('Packtracker stats uploaded!')
       })
-
-    return this.config.failBuild
-      ? generate
-      : generate.catch((error) => {
+      .catch((error) => {
         console.error(`Packtracker stats failed to upload: ${error.message}`)
         console.error(error)
+
+        if (this.config.failBuild) {
+          throw error
+        }
       })
   }
 }
