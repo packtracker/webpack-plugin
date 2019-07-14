@@ -16,7 +16,7 @@ try {
   logger(`retrieving stats from ${statsFilePath}`)
   stats = JSON.parse(fs.readFileSync(statsFilePath, 'utf8'))
 } catch (err) {
-  console.error('There was a problem reading your stats file.')
+  logger('there was a problem reading your stats file.')
   console.error(err)
   process.exit(1)
 }
@@ -30,7 +30,7 @@ upload.process(stats, outputPath)
     process.exit(0)
   })
   .catch((err) => {
-    console.error('There was a problem uploading your stats.')
+    logger('there was a problem uploading your stats.')
     console.error(err)
     process.exit(1)
   })

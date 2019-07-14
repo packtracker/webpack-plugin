@@ -48,11 +48,11 @@ class Upload {
         return uploadToS3(response.upload_url, payload)
       })
       .then(() => {
-        console.log('Packtracker stats uploaded!')
+        logger('stats uploaded')
       })
       .catch((error) => {
-        console.error(`Packtracker stats failed to upload: ${error.message}`)
-        console.error(error)
+        logger(`stats failed to upload: ${error.message}`)
+        logger(`this could be because your project token is not properly set`)
 
         if (this.config.failBuild) {
           logger('re-throwing failure because `fail_build` set to true')
@@ -70,13 +70,12 @@ function getBundleData (statJson, outputPath, excludeAssets = null) {
   try {
     data = getViewerData(statJson, outputPath, { excludeAssets })
   } catch (err) {
-    console.error(`Could not analyze webpack bundle:\n${err}`)
-    console.error(err.stack)
+    logger(`could not analyze webpack bundle (${err})`)
     data = null
   }
 
   if (isPlainObject(data) && isEmpty(data)) {
-    console.error('Could not find any javascript bundles')
+    logger('could not find any javascript bundles')
     data = null
   }
 
