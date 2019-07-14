@@ -144,8 +144,8 @@ describe('PacktrackerPlugin', () => {
     }, (err, stats) => {
       expect(err).toBeInstanceOf(Error)
       expect(err.message).toBe('Error')
-      expect(console.error).not.toHaveBeenCalledWith('Packtracker stats failed to upload: Error')
-      expect(console.error).not.toHaveBeenCalledWith(error)
+      expect(console.error).toHaveBeenCalledWith('Packtracker stats failed to upload: Error')
+      expect(console.error).toHaveBeenCalledWith(error)
       done()
     })
   })

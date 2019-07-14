@@ -1,5 +1,6 @@
 const { execSync } = require('child_process')
 const OptionsError = require('./options_error')
+const logger = require('./logger')
 
 class Config {
   constructor (options = {}) {
@@ -55,17 +56,21 @@ class Config {
     }
 
     if (!this.commit || !this.branch || !this.committedAt) {
+      logger('config validation failed, throwing options error')
       throw new OptionsError()
     }
 
     if (this.branch === 'HEAD') {
       throw new Error('packtracker: Not able to determine branch name with git, please provide it manually via config options: https://docs.packtracker.io/faq#why-cant-the-plugin-determine-my-branch-name')
     }
+
+    logger('configured successfully')
   }
 }
 
 function retrieveConfig (command, configName) {
   try {
+    logger(`${configName} not explicitly provided, falling back to retrieve it from from git`)
     return execSync(command).toString().trim()
   } catch (error) {
     console.error(`packtracker: Ooops, looks like we had trouble trying to retrieve the '${configName}' from git`)
