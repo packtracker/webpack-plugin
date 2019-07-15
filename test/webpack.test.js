@@ -21,8 +21,6 @@ tiny.put.mockResolvedValue({
   body: {}
 })
 
-console.log = jest.fn()
-
 function plugin (options = {}) {
   return new PacktrackerPlugin(Object.assign({
     upload: true,
@@ -39,7 +37,10 @@ function plugin (options = {}) {
 }
 
 describe('PacktrackerPlugin', () => {
-  beforeEach(() => jest.clearAllMocks())
+  beforeEach(() => {
+    jest.clearAllMocks()
+    console.log = jest.fn()
+  })
 
   test('webpack@2', (done) => {
     webpack2({
@@ -102,13 +103,11 @@ describe('PacktrackerPlugin', () => {
       if (err) return done(err)
       expect(tiny.post).not.toHaveBeenCalled()
       expect(tiny.put).not.toHaveBeenCalled()
-      expect(console.log).not.toHaveBeenCalled()
       done()
     })
   })
 
   test('webpack@4 failed to upload', (done) => {
-    console.error = jest.fn()
     const error = new Error('Error')
     tiny.post.mockRejectedValue(error)
 
@@ -122,14 +121,11 @@ describe('PacktrackerPlugin', () => {
       plugins: [ plugin() ]
     }, (err, stats) => {
       expect(err).toBe(null)
-      expect(console.error).toHaveBeenCalledWith('Packtracker stats failed to upload: Error')
-      expect(console.error).toHaveBeenCalledWith(error)
       done()
     })
   })
 
   test('webpack@4 failed to upload with fail build option', (done) => {
-    console.error = jest.fn()
     const error = new Error('Error')
     tiny.post.mockRejectedValue(error)
 
@@ -144,8 +140,6 @@ describe('PacktrackerPlugin', () => {
     }, (err, stats) => {
       expect(err).toBeInstanceOf(Error)
       expect(err.message).toBe('Error')
-      expect(console.error).not.toHaveBeenCalledWith('Packtracker stats failed to upload: Error')
-      expect(console.error).not.toHaveBeenCalledWith(error)
       done()
     })
   })
@@ -221,6 +215,4 @@ function expectations (stats) {
       }]
     }
   })
-
-  expect(console.log).toHaveBeenCalledWith('Packtracker stats uploaded!')
 }
