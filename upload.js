@@ -2,6 +2,7 @@ const tiny = require('tiny-json-http')
 const { getViewerData } = require('webpack-bundle-analyzer/lib/analyzer')
 const { isPlainObject, isEmpty, cloneDeep } = require('lodash')
 const omitDeep = require('omit-deep')
+const logger = require('./logger')
 
 class Upload {
   constructor (config) {
@@ -9,10 +10,16 @@ class Upload {
   }
 
   process (statsJson, outputPath) {
-    if (statsJson.errors.length) return
+    logger('processing upload')
+    if (statsJson.errors.length) {
+      logger('halting upload due to stats errors')
+      statsJson.errors.forEach((e) => logger(`stats error: ${e}`))
+      return Promise.resolve()
+    }
 
     // Ensure we're not capturing the source
     statsJson = omitDeep(statsJson, ['source'])
+    logger('filtering out source from stats json')
 
     const payload = {
       packer: 'webpack@' + statsJson.version,
@@ -30,24 +37,27 @@ class Upload {
       )
     }
 
-    const generate = generateUploadUrl(
+    return generateUploadUrl(
       this.config.host,
       this.config.projectToken,
       this.config.commit
     )
       .then(response => {
+        logger(`upload url generated (${response.upload_url})`)
         payload.project_id = response.project_id
         return uploadToS3(response.upload_url, payload)
       })
       .then(() => {
-        console.log('Packtracker stats uploaded!')
+        logger('stats uploaded')
       })
+      .catch((error) => {
+        logger(`stats failed to upload: ${error.message}`)
+        logger(`this could be because your project token is not properly set`)
 
-    return this.config.failBuild
-      ? generate
-      : generate.catch((error) => {
-        console.error(`Packtracker stats failed to upload: ${error.message}`)
-        console.error(error)
+        if (this.config.failBuild) {
+          logger('re-throwing failure because `fail_build` set to true')
+          throw error
+        }
       })
   }
 }
@@ -55,16 +65,17 @@ class Upload {
 function getBundleData (statJson, outputPath, excludeAssets = null) {
   let data
 
+  logger('retrieving javascript bundle data')
+
   try {
     data = getViewerData(statJson, outputPath, { excludeAssets })
   } catch (err) {
-    console.error(`Could not analyze webpack bundle:\n${err}`)
-    console.error(err.stack)
+    logger(`could not analyze webpack bundle (${err})`)
     data = null
   }
 
   if (isPlainObject(data) && isEmpty(data)) {
-    console.error('Could not find any javascript bundles')
+    logger('could not find any javascript bundles')
     data = null
   }
 
@@ -72,6 +83,7 @@ function getBundleData (statJson, outputPath, excludeAssets = null) {
 }
 
 function generateUploadUrl (host, projectToken, commitHash) {
+  logger('generating upload url')
   return tiny.post({
     url: `${host}/generate-upload-url`,
     headers: { 'Accept': 'application/json' },
@@ -83,6 +95,7 @@ function generateUploadUrl (host, projectToken, commitHash) {
 }
 
 function uploadToS3 (url, data) {
+  logger('uploading to s3')
   return tiny.put({ url, data })
 }
 

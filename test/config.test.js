@@ -8,7 +8,11 @@ jest.mock('child_process')
 
 describe('PacktrackerPlugin', () => {
   describe('config', () => {
-    beforeEach(() => execSync.mockClear())
+    beforeEach(() => {
+      execSync.mockClear()
+      console.log = jest.fn()
+      console.error = jest.fn()
+    })
 
     test('default', () => {
       const plugin = new PacktrackerPlugin({
