@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 - Better error handling and visibility for failed states
+- More general purpose logging (to help with debugging)
 
 ## 2.1.0
 
