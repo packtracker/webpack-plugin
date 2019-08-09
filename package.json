@@ -1,6 +1,6 @@
 {
   "name": "@packtracker/webpack-plugin",
-  "version": "2.1.2",
+  "version": "2.2.0",
   "description": "Upload your webpack build stats to the packtracker.io service for greater visiblity into the artifacts you're delivering to your customers.",
   "homepage": "https://app.packtracker.io",
   "repository": "github:packtracker/webpack-plugin",
@@ -39,11 +39,10 @@
     "webpack": ">= 2.0.0"
   },
   "dependencies": {
-    "lodash": "^4.17.11",
+    "lodash": "^4.17.15",
     "minimist": "^1.2.0",
     "omit-deep": "^0.3.0",
-    "tiny-json-http": "^7.0.2",
-    "webpack-bundle-analyzer": "^3.3.2",
-    "tiny-json-http": "^7.0.2"
+    "tiny-json-http": "^7.1.2",
+    "webpack-bundle-analyzer": "^3.4.1"
   }
 }

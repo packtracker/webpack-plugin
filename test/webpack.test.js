@@ -1,6 +1,7 @@
 /* globals jest, describe, test, beforeEach, expect */
 
 const path = require('path')
+const os = require('os')
 const webpack2 = require('webpack-2')
 const webpack3 = require('webpack-3')
 const webpack4 = require('webpack')
@@ -159,6 +160,7 @@ function expectations (stats) {
   expect(tiny.put).toHaveBeenCalledWith({
     url: 'http://upload.url',
     data: {
+      project_id: 'project-id',
       packer: 'webpack@' + stats.version,
       commit: '07db3813141ca398ffe8cd07cf71769195abe8a3',
       committed_at: 1534978373,
@@ -166,7 +168,7 @@ function expectations (stats) {
       author: 'jane@doe.com',
       message: 'This is a commit message',
       prior_commit: '4a47653d5fc58fc62757c6b815e715ec77c8ee2e',
-      project_id: 'project-id',
+      uploader_hostname: os.hostname(),
       stats: expect.objectContaining({
         assets: [{
           chunkNames: ['main'],

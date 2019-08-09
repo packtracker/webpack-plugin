@@ -2,6 +2,7 @@ const tiny = require('tiny-json-http')
 const { getViewerData } = require('webpack-bundle-analyzer/lib/analyzer')
 const { isPlainObject, isEmpty, cloneDeep } = require('lodash')
 const omitDeep = require('omit-deep')
+const os = require('os')
 const logger = require('./logger')
 
 class Upload {
@@ -30,6 +31,7 @@ class Upload {
       message: this.config.message,
       prior_commit: this.config.priorCommit,
       stats: statsJson,
+      uploader_hostname: os.hostname(),
       bundle: getBundleData(
         cloneDeep(statsJson),
         outputPath,
@@ -43,7 +45,7 @@ class Upload {
       this.config.commit
     )
       .then(response => {
-        logger(`upload url generated (${response.upload_url})`)
+        logger(`upload url generated`)
         payload.project_id = response.project_id
         return uploadToS3(response.upload_url, payload)
       })
