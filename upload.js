@@ -45,7 +45,7 @@ class Upload {
       this.config.commit
     )
       .then(response => {
-        logger(`upload url generated (${response.upload_url})`)
+        logger(`upload url generated`)
         payload.project_id = response.project_id
         return uploadToS3(response.upload_url, payload)
       })
