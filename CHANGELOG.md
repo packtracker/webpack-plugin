@@ -5,6 +5,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 2.2.0
+
+### Added
+- Added the uploader hostname to payload in order to identify errant uploads
+
+### Changed
+- Updated a few dependencies
+
 ## 2.1.1
 
 ### Changed
