@@ -80,13 +80,21 @@ function retrieveConfig (command, configName) {
 }
 
 function retrieveExcludeAssets (options) {
+  let exclusion
+
   if (options.exclude_assets) {
-    return options.exclude_assets
+    exclusion = options.exclude_assets
   }
 
   if (process.env.PT_EXCLUDE_ASSETS) {
-    return new RegExp(process.env.PT_EXCLUDE_ASSETS)
+    exclusion = new RegExp(process.env.PT_EXCLUDE_ASSETS)
   }
+
+  if (exclusion) {
+    logger(`excluding assets using ${exclusion}`)
+  }
+
+  return exclusion
 }
 
 module.exports = Config
