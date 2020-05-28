@@ -8,7 +8,7 @@ class Config {
     if (!this.upload) return
 
     this.projectToken = options.project_token || process.env.PT_PROJECT_TOKEN
-    this.excludeAssets = options.exclude_assets
+    this.excludeAssets = retrieveExcludeAssets(options)
     this.statOptions = { source: false, excludeAssets: this.excludeAssets }
 
     this.host = options.host ||
@@ -76,6 +76,16 @@ function retrieveConfig (command, configName) {
     logger(`ooops, looks like we had trouble trying to retrieve the '${configName}' from git`)
     console.error(error.message)
     throw new OptionsError()
+  }
+}
+
+function retrieveExcludeAssets (options) {
+  if (options.exclude_assets) {
+    return options.exclude_assets
+  }
+
+  if (process.env.PT_EXCLUDE_ASSETS) {
+    return new RegExp(process.env.PT_EXCLUDE_ASSETS)
   }
 }
 
