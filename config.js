@@ -8,7 +8,7 @@ class Config {
     if (!this.upload) return
 
     this.projectToken = options.project_token || process.env.PT_PROJECT_TOKEN
-    this.excludeAssets = options.exclude_assets
+    this.excludeAssets = retrieveExcludeAssets(options)
     this.statOptions = { source: false, excludeAssets: this.excludeAssets }
 
     this.host = options.host ||
@@ -77,6 +77,24 @@ function retrieveConfig (command, configName) {
     console.error(error.message)
     throw new OptionsError()
   }
+}
+
+function retrieveExcludeAssets (options) {
+  let exclusion
+
+  if (process.env.PT_EXCLUDE_ASSETS) {
+    exclusion = new RegExp(process.env.PT_EXCLUDE_ASSETS)
+  }
+
+  if (options.exclude_assets) {
+    exclusion = options.exclude_assets
+  }
+
+  if (exclusion) {
+    logger(`excluding assets using ${exclusion}`)
+  }
+
+  return exclusion
 }
 
 module.exports = Config

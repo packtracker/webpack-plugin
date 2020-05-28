@@ -93,11 +93,12 @@ describe('PacktrackerPlugin', () => {
       process.env.PT_COMMIT = '07db3813141ca398ffe8cd07cf71769195abe8a3'
       process.env.PT_COMMITTED_AT = '1534978373'
       process.env.PT_PRIOR_COMMIT = '4a47653d5fc58fc62757c6b815e715ec77c8ee2e'
+      process.env.PT_EXCLUDE_ASSETS = 'test'
 
       const plugin = new PacktrackerPlugin()
 
       expect(plugin.config.upload).toBe(true)
-      expect(plugin.config.excludeAssets).toBe(undefined)
+      expect('test').toMatch(plugin.config.excludeAssets)
       expect(plugin.config.projectToken).toEqual('abc123')
       expect(plugin.config.host).toEqual('http://custom.host')
       expect(plugin.config.failBuild).toEqual(true)
